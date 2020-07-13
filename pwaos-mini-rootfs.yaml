@@ -28,7 +28,7 @@ actions:
   - action: run
     chroot: true
     description: Enabling USB networking service && remove droid-hal-cosmopda
-    command: systemctl enable usb-tethering && apt remove droid-hal-cosmopda
+    command: systemctl enable usb-tethering && apt -y remove droid-hal-cosmopda
 
   - action: run
     chroot: true
@@ -55,10 +55,25 @@ actions:
       - lxc
       - lxc-android
 
+  - action: overlay
+    description: Adding pwaos-lxc overlay 1
+    source: overlay/lxc-setup
+    destination: /
+
   - action: run
     chroot: true
-    description: Setup lxc env
-    script: scripts/setup-lxc.sh
+    description: Setup lxc env 2
+    command: systemctl unmask droid-hal-init
+
+  - action: run
+    chroot: true
+    description: create lxc dir 3
+    command: mkdir -p /var/lib/lxc-android-config/diversions && mkdir -p /var/lib/lxc/android/overrides && mkdir -p /var/lib/lxc/android/rootfs
+
+  - action: run
+    chroot: true
+    description: create lxc symbollink 4
+    command: mkdir -p /android /mnt/vendor/persist /mnt/vendor/efs /userdata && ln -s /android/data /data && ln -s /android/system /system && ln -s /android/vendor /vendor && ln -s /android/cache /cache && ln -s /android/persist /persist && ln -s /android/product /product && ln -s /android/metadata /metadata && ln -s /android/efs /efs
 
   - action: overlay
     description: Adding pwaos overlay

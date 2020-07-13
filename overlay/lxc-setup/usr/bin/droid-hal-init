@@ -1,0 +1,7 @@
+#!/bin/sh
+# Wait for Android LXC container to start
+hw_status=$(getprop hwservicemanager.ready)
+if [ "$hw_status" = "true" ] ; then
+    echo "hwservicemanager service running"
+    sleep 1
+fi
