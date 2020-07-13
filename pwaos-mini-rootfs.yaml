@@ -23,11 +23,12 @@ actions:
     description: Installing packages for libhybris-based HW adaptation
     packages:
       - hybris-usb
+      - droid-hal-cosmopda
 
   - action: run
     chroot: true
-    description: Enabling USB networking service
-    command: systemctl enable usb-tethering
+    description: Enabling USB networking service && remove droid-hal-cosmopda
+    command: systemctl enable usb-tethering && apt remove droid-hal-cosmopda
 
   - action: run
     chroot: true
@@ -48,6 +49,21 @@ actions:
     description: Add apt sandbox user to Android inet group
     command: sed -i 's/_apt:x:100:65534/_apt:x:100:3003/g' /etc/passwd
 
+  - action: apt
+    description: Installing packages for lxc
+    packages:
+      - lxc
+      - lxc-android
+
+  - action: run
+    chroot: true
+    description: Setup lxc env
+    script: scripts/setup-lxc.sh
+
+  - action: overlay
+    description: Adding pwaos overlay
+    source: overlay/pwaos
+    destination: /
 
   - action: image-file
     imagename: {{ $image }}
