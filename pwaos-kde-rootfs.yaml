@@ -33,6 +33,11 @@ actions:
     description: Enabling libhybris EGL libs
     command: ln -s /usr/lib/aarch64-linux-gnu/libhybris-egl/ld.so.conf /etc/ld.so.conf.d/00_libhybris-egl.conf && ldconfig
 
+  - action: overlay
+    description: overlay hybris so fixed lxdm crash && touch.
+    source: overlay/patch-hybris
+    destination: /
+
   - action: run
     chroot: true
     description: Applying custom PulseAudio config
